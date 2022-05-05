@@ -514,6 +514,8 @@ class Workflow:
         immediate_submit=False,
         ignore_ambiguity=False,
         printrulegraph=False,
+        printbibtex=False,
+        printbibliography=False,
         printfilegraph=False,
         printd3dag=False,
         drmaa=None,
@@ -674,6 +676,8 @@ class Workflow:
             ignore_incomplete=ignore_incomplete
             or printdag
             or printrulegraph
+            or printbibtex
+            or printbibliography
             or printfilegraph,
             notemp=notemp,
             keep_remote_local=keep_remote_local,
@@ -688,6 +692,8 @@ class Workflow:
             shadow_prefix=self.shadow_prefix,
             warn_only=dryrun
             or printrulegraph
+            or printbibtex
+            or printbibliography
             or printfilegraph
             or printdag
             or summary
@@ -753,6 +759,8 @@ class Workflow:
             and self.execute_subworkflows
             and not printdag
             and not printrulegraph
+            and not printbibtex
+            and not printbibliography
             and not printfilegraph
         ):
             # backup globals
@@ -868,6 +876,12 @@ class Workflow:
             return True
         elif printrulegraph:
             print(dag.rule_dot())
+            return True
+        elif printbibtex:
+            print(dag.bibtex())
+            return True
+        elif printbibliography:
+            print(dag.bibliography())
             return True
         elif printfilegraph:
             print(dag.filegraph_dot())
@@ -1465,6 +1479,8 @@ class Workflow:
 
             if ruleinfo.version:
                 rule.version = ruleinfo.version
+            if ruleinfo.bibtex:
+                rule.bibtex = ruleinfo.bibtex
             if ruleinfo.log:
                 pos_files, keyword_files, modifier = ruleinfo.log
                 rule.log_modifier = modifier
@@ -1762,6 +1778,13 @@ class Workflow:
     def priority(self, priority):
         def decorate(ruleinfo):
             ruleinfo.priority = priority
+            return ruleinfo
+
+        return decorate
+
+    def bibtex(self, bibtex):
+        def decorate(ruleinfo):
+            ruleinfo.bibtex = bibtex
             return ruleinfo
 
         return decorate

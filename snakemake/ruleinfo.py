@@ -28,6 +28,7 @@ class RuleInfo:
         self.priority = None
         self.retries = None
         self.version = None
+        self.bibtex = None
         self.log = None
         self.docstring = None
         self.group = None

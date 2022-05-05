@@ -484,6 +484,10 @@ class Conda(RuleKeywordState):
     pass
 
 
+class Bibtex(RuleKeywordState):
+    pass
+
+
 class Singularity(RuleKeywordState):
     @property
     def keyword(self):
@@ -707,6 +711,7 @@ rule_property_subautomata = dict(
     message=Message,
     benchmark=Benchmark,
     conda=Conda,
+    bibtex=Bibtex,
     singularity=Singularity,
     container=Container,
     containerized=Containerized,

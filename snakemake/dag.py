@@ -1953,6 +1953,29 @@ class DAG:
             graph[job.rule].update(dep.rule for dep in self.dependencies[job])
         return self._dot(graph)
 
+    def bibtex(self):
+        # concatenate the files into a single string
+        bibtex_strings = []
+        for bibtex_file in self.bibtex_files():
+            with open(bibtex_file, 'r') as f:
+                bibtex_strings.append(f.read())
+        return "\n".join(bibtex_strings)
+
+    def bibliography(self, style="plain", output_backend="plaintext"):
+        from pybtex import PybtexEngine
+        engine = PybtexEngine()
+        return engine.format_from_files(
+            bib_files_or_filenames=self.bibtex_files(), style=style, output_backend=output_backend
+        )
+
+    def bibtex_files(self):
+        # Create a set with the distinct bibtex files
+        files = set()
+        for job in self.jobs:
+            if job.rule.bibtex:
+                files.update(job.rule.bibtex_files())
+        return files
+        
     def dot(self):
         def node2style(job):
             if not self.needrun(job):

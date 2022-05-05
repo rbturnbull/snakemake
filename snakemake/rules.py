@@ -91,6 +91,7 @@ class Rule:
             self.shadow_depth = None
             self.resources = None
             self.priority = 0
+            self.bibtex = None
             self._version = None
             self._log = Log()
             self._benchmark = None
@@ -141,6 +142,7 @@ class Rule:
             self.shadow_depth = other.shadow_depth
             self.resources = other.resources
             self.priority = other.priority
+            self.bibtex = other.bibtex
             self.version = other.version
             self._log = other._log
             self._benchmark = other._benchmark
@@ -368,6 +370,35 @@ class Rule:
     @conda_env.setter
     def conda_env(self, conda_env):
         self._conda_env = conda_env
+
+    def bibtex_files(self):
+        if not self.bibtex:
+            return []
+
+        bibtex = self.bibtex
+        if isinstance(bibtex, str) or isinstance(bibtex, Path):
+            bibtex = [self.bibtex]
+
+        paths = []
+        base_dir = Path(self.snakefile).parent.resolve()
+        for b in bibtex:
+            path = Path(b)
+            if not path.is_absolute():
+                path = base_dir/path
+
+            path = path.resolve()
+            
+            if not path.exists():
+                raise RuleException(
+                    f"Could not find bibtex file '{b}' in rule '{self.name}'.\nLooking at path: {path}",
+                    lineno=self.lineno,
+                    snakefile=self.snakefile,
+                )
+
+
+            paths.append(path)
+
+        return paths
 
     @property
     def container_img(self):
@@ -1333,3 +1364,7 @@ class RuleProxy:
         files = Namedlist(files, custom_map=cleanup)
 
         return files
+
+
+
+        
