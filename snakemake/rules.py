@@ -91,7 +91,7 @@ class Rule:
             self.shadow_depth = None
             self.resources = None
             self.priority = 0
-            self.bibtex = None
+            self._bibtex = None
             self._version = None
             self._log = Log()
             self._benchmark = None
@@ -142,7 +142,7 @@ class Rule:
             self.shadow_depth = other.shadow_depth
             self.resources = other.resources
             self.priority = other.priority
-            self.bibtex = other.bibtex
+            self._bibtex = other._bibtex
             self.version = other.version
             self._log = other._log
             self._benchmark = other._benchmark
@@ -371,34 +371,37 @@ class Rule:
     def conda_env(self, conda_env):
         self._conda_env = conda_env
 
-    def bibtex_files(self):
-        if not self.bibtex:
-            return []
+    @property
+    def bibtex(self):
+        return self._bibtex
 
-        bibtex = self.bibtex
-        if isinstance(bibtex, str) or isinstance(bibtex, Path):
-            bibtex = [self.bibtex]
+    @bibtex.setter
+    def bibtex(self, files):
+        if not files:
+            files = []
 
-        paths = []
+        if isinstance(files, str) or isinstance(files, Path):
+            files = [files]
+
+        paths = set()
         base_dir = Path(self.snakefile).parent.resolve()
-        for b in bibtex:
-            path = Path(b)
+        for file in files:
+            path = Path(file)
             if not path.is_absolute():
                 path = base_dir/path
 
             path = path.resolve()
-            
+
             if not path.exists():
                 raise RuleException(
-                    f"Could not find bibtex file '{b}' in rule '{self.name}'.\nLooking at path: {path}",
+                    f"Could not find bibtex file '{file}' in rule '{self.name}'.\nLooking at path: {path}",
                     lineno=self.lineno,
                     snakefile=self.snakefile,
                 )
 
+            paths.add(path)
 
-            paths.append(path)
-
-        return paths
+        self._bibtex = paths
 
     @property
     def container_img(self):

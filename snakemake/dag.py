@@ -1973,7 +1973,7 @@ class DAG:
         files = set()
         for job in self.jobs:
             if job.rule.bibtex:
-                files.update(job.rule.bibtex_files())
+                files.update(job.rule.bibtex)
         return files
         
     def dot(self):
