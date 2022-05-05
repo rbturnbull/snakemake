@@ -878,7 +878,7 @@ class Workflow:
             print(dag.rule_dot())
             return True
         elif printbibtex:
-            print(dag.bibtex())
+            print(dag.bibtex_str())
             return True
         elif printbibliography:
             print(dag.bibliography())

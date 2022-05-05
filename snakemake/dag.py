@@ -1953,22 +1953,10 @@ class DAG:
             graph[job.rule].update(dep.rule for dep in self.dependencies[job])
         return self._dot(graph)
 
-    def bibtex(self):
-        # concatenate the files into a single string
-        bibtex_strings = []
-        for bibtex_file in self.bibtex_files():
-            with open(bibtex_file, 'r') as f:
-                bibtex_strings.append(f.read())
-        return "\n".join(bibtex_strings)
-
-    def bibliography(self, style="plain", output_backend="plaintext"):
-        from pybtex import PybtexEngine
-        engine = PybtexEngine()
-        return engine.format_from_files(
-            bib_files_or_filenames=self.bibtex_files(), style=style, output_backend=output_backend
-        )
-
-    def bibtex_files(self):
+    def bibtex(self) -> set:
+        """
+        Returns a set of Path objects with the bibtex files for each rule in the DAG.
+        """
         # Create a set with the distinct bibtex files
         files = set()
         for job in self.jobs:
@@ -1976,6 +1964,26 @@ class DAG:
                 files.update(job.rule.bibtex)
         return files
         
+    def bibtex_str(self) -> str:
+        """
+        Returns the concatenation of the bibtex files for each rule in the DAG as a string.
+        """
+        bibtex_strings = []
+        for bibtex_file in self.bibtex():
+            with open(bibtex_file, 'r') as f:
+                bibtex_strings.append(f.read())
+        return "\n".join(bibtex_strings)
+
+    def bibliography(self, style="plain", output_backend="plaintext") -> str:
+        """
+        Returns a formatted bibliography based on the bibtex files for each rule in the DAG.
+        """
+        from pybtex import PybtexEngine
+        engine = PybtexEngine()
+        return engine.format_from_files(
+            bib_files_or_filenames=self.bibtex(), style=style, output_backend=output_backend
+        )
+
     def dot(self):
         def node2style(job):
             if not self.needrun(job):
