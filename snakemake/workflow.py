@@ -1479,8 +1479,8 @@ class Workflow:
 
             if ruleinfo.version:
                 rule.version = ruleinfo.version
-            if ruleinfo.bibtex:
-                rule.bibtex = ruleinfo.bibtex
+            if ruleinfo.bibs:
+                rule.bibs = ruleinfo.bibs
             if ruleinfo.log:
                 pos_files, keyword_files, modifier = ruleinfo.log
                 rule.log_modifier = modifier
@@ -1782,9 +1782,9 @@ class Workflow:
 
         return decorate
 
-    def bibtex(self, bibtex):
+    def bibs(self, *bibs):
         def decorate(ruleinfo):
-            ruleinfo.bibtex = bibtex
+            ruleinfo.bibs = bibs
             return ruleinfo
 
         return decorate

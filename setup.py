@@ -75,7 +75,8 @@ setup(
         "yte >=1.0,<2.0",
         "jinja2 >=3.0,<4.0",
         "retry",
-        "pybtex",
+        "pybtexris",
+        "pybtexnbib",
     ],
     extras_require={
         "reports": ["jinja2", "pygments"],

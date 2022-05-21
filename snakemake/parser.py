@@ -484,7 +484,7 @@ class Conda(RuleKeywordState):
     pass
 
 
-class Bibtex(RuleKeywordState):
+class Bibs(RuleKeywordState):
     pass
 
 
@@ -711,7 +711,7 @@ rule_property_subautomata = dict(
     message=Message,
     benchmark=Benchmark,
     conda=Conda,
-    bibtex=Bibtex,
+    bibs=Bibs,
     singularity=Singularity,
     container=Container,
     containerized=Containerized,
