@@ -377,10 +377,18 @@ class Rule:
 
     @bibs.setter
     def bibs(self, files):
+        """
+        Sets the bibliography files for this rule to self._bibs.
+
+        Transforms the list to a set of absolute paths.
+
+        Arguments
+        files  -- a list of paths to bibliography files, relative to the directory with the snakefile.
+        """
         if not files:
             files = []
 
-        if isinstance(files, str) or isinstance(files, Path):
+        if isinstance(files, (str,Path)):
             files = [files]
 
         paths = set()

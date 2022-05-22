@@ -1974,18 +1974,38 @@ class DAG:
                 bibtex_strings.append(f.read())
         return "\n".join(bibtex_strings)
 
-    def bibliography(self, style="plain", output_backend="plaintext") -> str:
+    def bibliography(self, format="plain", output_backend="plaintext") -> str:
         """
         Returns a formatted bibliography based on the bibliography files for each rule in the DAG.
         """
-        from pybtex import PybtexEngine
-        engine = PybtexEngine()
+        from pybtex import format_from_files
+        from pybtex.plugin import enumerate_plugin_names, find_plugin
+
         bibs = self.bibs()
-        return engine.format_from_files(
-            bib_files_or_filenames=bibs, 
-            style=style, 
-            output_backend=output_backend,
-            bib_format="suffix",
+
+        # Check to see if the `format` string matches an available output format
+        # If so, then write out the bibliography in that format
+        outputs = list(enumerate_plugin_names('pybtex.database.output'))
+        if format in outputs:
+            parser = find_plugin('pybtex.database.input', "suffix")()
+            data = parser.parse_files(bibs)
+            writer = find_plugin('pybtex.database.output', format)()
+            return writer.to_string(data)
+
+        # Check to see if the `format` string matches an available output style
+        # If so, then write out the bibliography in that style
+        styles = list(enumerate_plugin_names("pybtex.style.formatting"))
+        if format in styles:
+            return format_from_files(
+                bib_files_or_filenames=bibs, 
+                style=format, 
+                output_backend=output_backend,
+                bib_format="suffix",
+            )
+
+        raise Exception(
+            f"Bibliography format '{format}' is not available.\n"
+            f"Choose from an output format in {outputs} or a style format in {styles}."
         )
 
     def dot(self):
