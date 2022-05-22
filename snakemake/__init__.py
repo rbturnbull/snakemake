@@ -83,7 +83,6 @@ def snakemake(
     debug_dag=False,
     printdag=False,
     printrulegraph=False,
-    printbibtex=False,
     printbibliography=False,
     printfilegraph=False,
     printd3dag=False,
@@ -225,7 +224,6 @@ def snakemake(
         printshellcmds (bool):      print the shell command of each job (default False)
         printdag (bool):            print the dag in the graphviz dot language (default False)
         printrulegraph (bool):      print the graph of rules in the graphviz dot language (default False)
-        printbibtex (bool):         print bibtex entries for the rules used in the dag (default False)
         printbibliography (bool):   print bibliography for the rules used in the dag (default False)
         printfilegraph (bool):      print the graph of rules with their input and output files in the graphviz dot language (default False)
         printd3dag (bool):          print a D3.js compatible JSON representation of the DAG (default False)
@@ -470,7 +468,7 @@ def snakemake(
         stdout = (
             (
                 dryrun
-                and not (printdag or printd3dag or printrulegraph or printbibtex or printbibliography or printfilegraph)
+                and not (printdag or printd3dag or printrulegraph or printbibliography or printfilegraph)
             )
             or listrules
             or list_target_rules
@@ -750,7 +748,6 @@ def snakemake(
                     printshellcmds=printshellcmds,
                     printreason=printreason,
                     printrulegraph=printrulegraph,
-                    printbibtex=printbibtex,
                     printbibliography=printbibliography,
                     printfilegraph=printfilegraph,
                     printdag=printdag,
@@ -1674,16 +1671,9 @@ def get_argument_parser(profile=None):
         "with visualization.",
     )
     group_utils.add_argument(
-        "--bibtex",
-        action="store_true",
-        help="Do not execute anything and print the bibtex entries "
-        "for the rules in the DAG of jobs. "
-        "Note print statements in your Snakefile may interfere "
-        "with the output.",
-    )
-    group_utils.add_argument(
         "--bibliography",
-        action="store_true",
+        action="store",
+        default="",
         help="Do not execute anything and print the bibliography "
         "for the rules in the DAG of jobs. "
         "Note print statements in your Snakefile may interfere "
@@ -2608,7 +2598,6 @@ def main(argv=None):
         or args.d3dag
         or args.filegraph
         or args.rulegraph
-        or args.bibtex
         or args.bibliography
         or args.summary
         or args.lint
@@ -2915,7 +2904,6 @@ def main(argv=None):
             debug_dag=args.debug_dag,
             printdag=args.dag,
             printrulegraph=args.rulegraph,
-            printbibtex=args.bibtex,
             printbibliography=args.bibliography,
             printfilegraph=args.filegraph,
             printd3dag=args.d3dag,

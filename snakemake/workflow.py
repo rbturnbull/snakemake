@@ -514,7 +514,6 @@ class Workflow:
         immediate_submit=False,
         ignore_ambiguity=False,
         printrulegraph=False,
-        printbibtex=False,
         printbibliography=False,
         printfilegraph=False,
         printd3dag=False,
@@ -676,7 +675,6 @@ class Workflow:
             ignore_incomplete=ignore_incomplete
             or printdag
             or printrulegraph
-            or printbibtex
             or printbibliography
             or printfilegraph,
             notemp=notemp,
@@ -692,7 +690,6 @@ class Workflow:
             shadow_prefix=self.shadow_prefix,
             warn_only=dryrun
             or printrulegraph
-            or printbibtex
             or printbibliography
             or printfilegraph
             or printdag
@@ -759,7 +756,6 @@ class Workflow:
             and self.execute_subworkflows
             and not printdag
             and not printrulegraph
-            and not printbibtex
             and not printbibliography
             and not printfilegraph
         ):
@@ -877,11 +873,8 @@ class Workflow:
         elif printrulegraph:
             print(dag.rule_dot())
             return True
-        elif printbibtex:
-            print(dag.bibtex_str())
-            return True
         elif printbibliography:
-            print(dag.bibliography())
+            print(dag.bibliography(format=printbibliography))
             return True
         elif printfilegraph:
             print(dag.filegraph_dot())
