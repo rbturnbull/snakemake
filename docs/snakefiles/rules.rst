@@ -1335,6 +1335,38 @@ These restrictions do not apply when using ``unpack()``.
         shell:
             "..."
 
+.. _snakefiles-bibliography:
+
+Bibliography
+------------
+
+Bibliography files can be associated with each rule, e.g.:
+
+.. code-block:: python
+
+    rule abc:
+        input: "input.txt"
+        output: "output.txt"
+        bibs: "bibs/awesomeprogram.ris", "bibs/awesomeprogram-background.bib"
+        shell: "awesomeprogram {input} {output}"
+
+Bibliography file paths are relative to the current Snakefile. 
+Accepted formats for bibliography files are BibTeX, BibTeXML, RIS, NBIB (PubMed), and YAML. 
+
+Snakemake can create a formatted bibliography based on the rules which are used in the DAG by using the ``--bibliography`` command line argument.
+
+.. code-block:: console
+
+    $ snakemake --bibliography plain
+
+The bibliography can also be exported an a format such as BibTeX or BibTeXML. 
+
+.. code-block:: console
+
+    $ snakemake --bibliography bibtex
+
+Additional input formats, styles and export formats can be added by adding `Pybtex <https://pybtex.org/>`_ plugins.
+
 .. _snakefiles-code_tracking:
 
 Code Tracking
