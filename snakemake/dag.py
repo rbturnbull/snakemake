@@ -1964,16 +1964,6 @@ class DAG:
                 files.update(job.rule.bibs)
         return files
         
-    def bibtex_str(self) -> str:
-        """
-        Returns the concatenation of the bibtex files for each rule in the DAG as a string.
-        """
-        bibtex_strings = []
-        for bib in self.bibs():
-            with open(bib, 'r') as f:
-                bibtex_strings.append(f.read())
-        return "\n".join(bibtex_strings)
-
     def bibliography(self, format="plain", output_backend="plaintext") -> str:
         """
         Returns a formatted bibliography based on the bibliography files for each rule in the DAG.
