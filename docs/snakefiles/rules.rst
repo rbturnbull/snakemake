@@ -1351,7 +1351,7 @@ Bibliography files can be associated with each rule, e.g.:
         shell: "awesomeprogram {input} {output}"
 
 Bibliography file paths are relative to the current Snakefile. 
-Accepted formats for bibliography files are BibTeX, BibTeXML, RIS, NBIB (PubMed), and YAML. 
+Accepted formats for bibliography files are BibTeX, BibTeXML, RIS, NBIB (PubMed) and YAML. 
 
 Snakemake can create a formatted bibliography based on the rules which are used in the DAG by using the ``--bibliography`` command line argument.
 
@@ -1359,13 +1359,13 @@ Snakemake can create a formatted bibliography based on the rules which are used 
 
     $ snakemake --bibliography plain
 
-The bibliography can also be exported an a format such as BibTeX or BibTeXML. 
+The bibliography can also be exported in a format such as BibTeX or BibTeXML. 
 
 .. code-block:: console
 
     $ snakemake --bibliography bibtex
 
-Additional input formats, styles and export formats can be added by adding `Pybtex <https://pybtex.org/>`_ plugins.
+Additional input, style and export formats can be added by adding `Pybtex <https://pybtex.org/>`_ plugins.
 
 .. _snakefiles-code_tracking:
 
