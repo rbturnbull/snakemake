@@ -1344,7 +1344,7 @@ Bibliography files can be associated with each rule, e.g.:
 
 .. code-block:: python
 
-    rule abc:
+    rule awesomeprogram:
         input: "input.txt"
         output: "output.txt"
         bibs: "bibs/awesomeprogram.ris", "bibs/awesomeprogram-background.bib"

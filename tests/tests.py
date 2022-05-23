@@ -6,6 +6,7 @@ __license__ = "MIT"
 import os
 import sys
 import uuid
+from io import StringIO
 import subprocess as sp
 from pathlib import Path
 
@@ -1919,3 +1920,25 @@ def test_github_issue1618():
 
 def test_conda_python_script():
     run(dpath("test_conda_python_script"), use_conda=True)
+
+    
+def test_bibliography():
+    # substitute stdout to capture output
+    _stdout = sys.stdout
+    sys.stdout = StringIO()
+
+    # Test formating bibliography in plain style
+    run(dpath("test_bibliography"), printbibliography="plain")
+    stdout_text = sys.stdout.getvalue()
+    assert "Firstname Lastname. An awesome program. High Impact Journal, 42:888–889, July 2022." in stdout_text
+    assert "Genius Researcher. Importand Background Research for Awesomeprogram. Amazing University Press, 1986." in stdout_text
+
+    # Test exporting bibliography in bibtex format
+    sys.stdout = StringIO()
+    run(dpath("test_bibliography"), printbibliography="bibtex")
+    stdout_text = sys.stdout.getvalue()
+    assert "@book{Researcher1989" in stdout_text
+    assert "@article{Lastname2022" in stdout_text
+
+    sys.stdout = _stdout
+
